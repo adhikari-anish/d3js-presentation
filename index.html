@@ -6,10 +6,43 @@
     <title>Document</title>
 </head>
 <body>
+    <div></div>
+    <div></div>
+
+    <div class="div-with-class"></div>
+
+    <table>
+        <tr>
+            <td>One</td>
+            <td>Two</td>
+        </tr>
+        <tr>
+            <td>Three</td>
+            <td>Four</td>
+        </tr>
+        
+
+    </table>
 
     <!-- including from project's folder  -->
     <script src="d3.v4.min.js"></script>
-    <!-- including from CDN -->
-    <!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
+
+    <script>
+        const div1 = d3.select('div');
+        console.log('first div', div1);
+
+        const allDivs = d3.selectAll('div');
+        console.log('all divs', allDivs);
+
+        const divWithClass = d3.select('.div-with-class');
+        console.log(divWithClass);
+
+        // nested selector
+        d3.select("tr").selectAll("td").style("background-color", "yellow");
+
+        // class-selector
+        // divWithClass.style('background-color', 'red')
+        //             .style('height', '5px');
+    </script>
 </body>
 </html>
