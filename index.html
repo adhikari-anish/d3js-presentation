@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <style>
+        .canvas {
+            background-color: pink;
+        }
+
+        .blue-circle {
+            fill: blue;
+        }
+    </style>
 </head>
 <body>
     <div></div>
@@ -24,25 +34,56 @@
 
     </table>
 
+    <br>
+
+    <div class="canvas">
+
+    </div>
+
     <!-- including from project's folder  -->
     <script src="d3.v4.min.js"></script>
 
     <script>
         const div1 = d3.select('div');
-        console.log('first div', div1);
 
         const allDivs = d3.selectAll('div');
-        console.log('all divs', allDivs);
 
         const divWithClass = d3.select('.div-with-class');
-        console.log(divWithClass);
 
         // nested selector
         d3.select("tr").selectAll("td").style("background-color", "yellow");
 
         // class-selector
-        // divWithClass.style('background-color', 'red')
-        //             .style('height', '5px');
+        divWithClass.style('background-color', 'red')
+                    .text('text inserted dynamically');
+
+        // append
+        const canvas = d3.select('.canvas')
+            
+        const svg = canvas.append('svg')
+            .attr('width', '500')
+            .attr('height','500');
+
+        const circle = svg.append('circle')
+            .attr('cx', 40)
+            .attr('cy', 40)
+            .attr('r', 20);
+
+        //remove
+        // svg.select('circle').remove();
+
+        // style
+        // circle.style('fill', 'green');
+
+        //classed
+        // circle.classed('blue-circle', true);
+
+        // html
+        // console.log(divWithClass.html());
+        
+        
+
+        
     </script>
 </body>
 </html>
