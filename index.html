@@ -7,9 +7,41 @@
 </head>
 <body>
 
+    <div class="canvas"></div>
+
     <!-- including from project's folder  -->
     <script src="d3.v4.min.js"></script>
-    <!-- including from CDN -->
-    <!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
+
+    <script>
+        // // without method chaining
+        // const canvas = d3.select('.canvas');
+
+        // const svg = canvas.append('svg');
+        // svg.attr('width', 500);
+        // svg.attr('height', 400);
+
+        // with method chaining
+        const svg = d3.select('.canvas')
+            .append('svg')
+            .attr('width', 500)
+            .attr('height', 500)
+            .style('background', '#ccc');
+
+        svg.append('rect')
+            .attr('x', 100)
+            .attr('y', 100)
+            .attr('width', 50)
+            .attr('height', 50)
+            .attr('fill', 'orange');
+
+        svg.append('line')
+            .attr('x1', 0)
+            .attr('y1', 500)
+            .attr('x2', 500)
+            .attr('y2', 0)
+            .attr('stroke', 'gray');
+            
+
+    </script>
 </body>
 </html>
