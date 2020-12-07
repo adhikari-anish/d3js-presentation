@@ -4,12 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        div {
+            width: 200px;
+            height: 200px;
+            background-color: green;
+        }
+    </style>
 </head>
 <body>
 
+    <div></div>
+
+    <br><br>
+    <div class="second-div"></div>
+
     <!-- including from project's folder  -->
     <script src="d3.v4.min.js"></script>
-    <!-- including from CDN -->
-    <!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
+
+    <script>
+        const div = d3.select('div');            
+    
+        div.on('mouseover', function() {
+            d3.select(this)
+                .transition()
+                .ease(d3.easeCubic)
+                .duration(500)
+                .delay(100)
+                .style('background-color', 'blue');
+
+        });
+
+        div.on('mouseout', function() {
+            d3.select(this).style('background-color', 'green');
+        });
+
+        let t = d3.transition()
+                    .ease(d3.easeCubic)
+                    .duration(500)
+                    .delay(100)
+
+        d3.select('.second-div')
+            .on('mouseover', function() {
+                d3.select(this)
+                    .transition(t)
+                    .style('width', '300px');
+            })
+            .on('mouseout', function() {
+                d3.select(this)
+                    .transition(t)
+                    .style('width', '200px');
+            })
+    </script>
 </body>
 </html>
