@@ -7,9 +7,28 @@
 </head>
 <body>
 
+    <p></p>
+    <p></p>
+    <p></p>
+
+
+
     <!-- including from project's folder  -->
     <script src="d3.v4.min.js"></script>
-    <!-- including from CDN -->
-    <!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
+
+    <script>
+        let data = [1, 2, 3];
+
+        d3.select('body')
+            .selectAll('p')
+            .data(data)
+            .text(function(d, i) { //this d3 text method will be called for each of the data
+                // console.log(d);
+                // console.log(i);
+                return d;
+            })
+
+
+    </script>
 </body>
 </html>
