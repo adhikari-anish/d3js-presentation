@@ -6,10 +6,80 @@
     <title>Document</title>
 </head>
 <body>
+    <!-- single element -->
+    <!-- <p></p> -->
 
-    <!-- including from project's folder  -->
-    <script src="d3.v4.min.js"></script>
-    <!-- including from CDN -->
-    <!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
+    <!-- multiple element -->
+    <!-- <p></p>
+    <p></p>
+    <p></p> -->
+
+    <!-- enter selection -->
+    <p></p>
+
+    <script src="d3.v5.7.0.js"></script>
+
+    <script>
+        /**** single element data join ****/
+        // let data = [1];
+
+        // d3.selectAll('p')
+        //     .data(data)
+        //     .text(function(d, i) {
+        //         return d;
+        //     })
+
+        /**** multiple element data join ****/
+        // let data = [1, 2, 3];
+        // d3.selectAll('p')
+        //     .data(data)
+        //     .text((d,i) => d);
+
+        /**** enter selection ****/
+        // let data = [1,2,3,4,5];
+        // const p = d3.selectAll('p')
+        //     .data(data)
+        //     .text((d,i) => d);
+
+        // console.log(p);
+
+        
+        let data = [1,2,3,4,5];
+
+        //exit selection
+        // const body = d3.select('body');
+        // body.append('p');
+        // body.append('p');
+        // body.append('p');
+        // body.append('p');
+        // body.append('p');
+        // body.append('p');
+
+        // join data to p elements
+        const p = d3.select('body')
+            .selectAll('p')
+            .data(data);
+            
+        //exit selection
+        // p.exit().remove();
+
+        // add text to p elements already in the DOM
+        p.text((d,i) => d);
+
+        // append the enter selection to DOM
+        p.enter()
+        .append('p')
+        .text((d,i) => d);
+
+        
+
+        console.log(p)
+
+
+
+        
+
+
+    </script>
 </body>
 </html>
