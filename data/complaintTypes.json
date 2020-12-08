@@ -1,0 +1,22 @@
+[
+    {
+        "type": "Environmental",
+        "number": 5
+    },
+    {
+        "type": "Social",
+        "number": 7
+    },
+    {
+        "type": "Labour",
+        "number": 15
+    },
+    {
+        "type": "Technical",
+        "number": 11
+    },
+    {
+        "type": "GBV",
+        "number": 3
+    }
+]
