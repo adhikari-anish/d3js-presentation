@@ -1,0 +1,14 @@
+[
+    {
+        "status": "open",
+        "number": 59
+    },
+    {
+        "status": "closed",
+        "number": 29
+    },
+    {
+        "status": "other",
+        "number": 12
+    }
+]

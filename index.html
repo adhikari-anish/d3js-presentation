@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        #canvas {
+            width: 500px;
+            height: 500px;
+        }
     </style>
 </head>
 <body>
@@ -14,94 +18,92 @@
 
 
     <script src="d3.v5.7.0.js"></script>
+    <!-- d3 legend -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js" integrity="sha512-wNH6xsp2n8CfB91nrBtfc4sfLwYPBMjSWVUwQOp60AYYXH6i8yCwuKFZ4rgK2i6pQek/b+bSyR7b01/922IBzQ==" crossorigin="anonymous"></script>
+    <!-- d3-tip -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js" integrity="sha512-a+/SD0dbGeXTN4AA5F1dDZqsPvXKKyS1bvU2z5ElpKNJ4xQlOMUs/1+suA+j+kj5nAAya+VmT5HUKZmazluxVQ==" crossorigin="anonymous"></script>
 
     <script>
+        
+        const dims = { width: 380, height: 310 };
+        const radius = Math.min(dims.width, dims.height) / 2;
         const svg = d3.select('#canvas')
-            .append('svg')
-            .attr('width', 600)
-            .attr('height', 600)
-            .attr('style', 'background-color: #ccc');
+                        .append('svg')
+                        .attr('viewBox', `0 0 480 410`);
 
-        let margin = {top: 40, left: 100, right: 40, bottom: 100};
-        let graphWidth = 600 - margin.left - margin.right,
-            graphHeight = 600 - margin.top - margin.bottom;
+        const graph = svg.append('g')
+                    .attr('transform', `translate(${(dims.width + 100)/2}, ${(dims.height + 100)/2})`);
 
-        let graph = svg.append('g')
-            .attr('width', graphWidth)
-            .attr('height', graphHeight)
-            .attr('transform', `translate(${margin.left}, ${margin.top})`);
+        const color = d3.scaleOrdinal(['#4cc02a', '#9a73ed', '#ecc026']);
 
-        // group for x-axis
-        let xAxisGroup = graph.append("g")
-            .attr('transform', `translate(0, ${graphHeight})`);
+        const pie = d3.pie()
+                        .value(d => d.number);
 
-        // group for y-axis
-        let yAxisGroup = graph.append("g");
+        console.log(pie)
 
-        // creating x scale
-        x = d3.scaleBand()
-            .range([0, graphWidth])
-            .padding(0.2);
+        const arcPath = d3.arc()
+                            .outerRadius(radius)
+                            .innerRadius(0);
 
-        // creating y scale
-        y = d3.scaleLinear()
-            .range([graphHeight, 0]);
+        const legendGroup = svg.append('g')
+                                .attr('transform', `translate(${(dims.width + 100)/2 - 54}, ${(dims.height + 60)})`);
 
-        d3.json('./data/complaintTypes.json')
+        const legend = d3.legendColor()
+                            .orient('horizontal')
+                            .shape('rect')
+                            .shapePadding(50)
+                            .scale(color);
+
+        const tip = d3.tip()
+                        .attr('class', 'pie-chart-tip')
+                        .html(d => {
+                            let content = `<div>${d.data.status} - ${d.data.number}</div>`;
+                            return content;
+                        });
+
+        graph.call(tip);
+
+
+        d3.json("/data/complaintStatus.json")
             .then(data => {
-                console.log(data);
+                color.domain(data.map(d => d.status));
 
-                x.domain(data.map(d => d.type));
-                y.domain([0, d3.max(data, d => d.number)]);
+                const paths = graph.selectAll('path')
+                                .data(pie(data));
 
-                xAxisGroup.call(d3.axisBottom(x));
-                yAxisGroup.call(d3.axisLeft(y));
+                // console.log(pie(data));
+                
+                paths.enter()
+                    .append('path')
+                    .attr('class', 'arc')
+                    // .attr('stroke', '#fff')
+                    // .attr('strokeWidth', 3)
+                    .attr('fill', d => color(d.data.status))
+                    .attr("d", arcPath);
 
-                const rects = graph.selectAll('rect')
-                    .data(data)
-                    .enter()
-                    .append('rect')
-                    .attr('x', d => x(d.type))
-                    .attr('y', graphHeight)
-                    .on('mouseover', mouseOver)
-                    .on('mouseout', mouseOut)
-                    .transition()
-                    .duration(500)
-                    .attr('y', d => {
-                        return y(d.number)
+
+                // update and call legend
+                legendGroup.call(legend);
+                legendGroup.selectAll('text').attr('fill', '#2a3539')
+
+                // graph title
+                svg.append('text')
+                .attr('transform', `translate(${(dims.width+100)/2}, 35)`)
+                .attr('font-size', '18px')
+                .attr('fill', '#2a3539')
+                .attr('text-anchor', 'middle')
+                .text('Complaint Status');
+
+                // add events
+                graph.selectAll('path')
+                    .on('mouseover', function(d, i, n) {
+                        tip.show(d, n[i]);
                     })
-                    .attr('width', x.bandwidth())
-                    .attr('height', d =>  graphHeight - y(d.number))
-                    .attr('fill', 'orange');
-
-                function mouseOver(d, i, n) {
-                    d3.select(this)
-                        .transition()
-                        .duration(500)
-                        .attr('fill', 'blue')
-
-
-                    graph.append('text')
-                        .attr('class', 'value')
-                        .attr('fill', '#000')
-                        .attr('font-size', '14px')
-                        .text(d.number)
-                        .attr('x', () => x(d.type) + 10)
-                        .attr('y', () => y(d.number) - 15);
-
-                    
-                }
-
-                function mouseOut(d, i, n) {
-                    d3.select(this)
-                        .transition()
-                        .duration(500)
-                        .attr('fill', 'orange')
-
-                    d3.select('.value').remove();
-                }
-
+                    .on('mouseout', function(d, i, n) {
+                        tip.hide();
+                    })
             })
+
 
 
         
